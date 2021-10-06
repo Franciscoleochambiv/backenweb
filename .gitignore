@@ -18,9 +18,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
-.xml
-.pdf
-.zip
+*.xml
+*.pdf
+*.zip
 
 npm-debug.log*
 yarn-debug.log*
