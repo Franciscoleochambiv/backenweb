@@ -149,6 +149,12 @@ module.exports ={
                     '</cac:PartyLegalEntity>'+
                     '</cac:Party>'+
                 '</cac:AccountingCustomerParty>'+
+                '<cac:PaymentTerms>'+
+'<cbc:ID>FormaPago</cbc:ID>'+
+'<cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>'+
+'</cac:PaymentTerms>'+
+
+
                 '<cac:TaxTotal>'+
                     '<cbc:TaxAmount currencyID="PEN">'+total_igv+'</cbc:TaxAmount>'+
                     '<cac:TaxSubtotal>'+
