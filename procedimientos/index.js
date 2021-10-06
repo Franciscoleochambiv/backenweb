@@ -1,6 +1,9 @@
-const {taskOne,taskTwo,taskTree,lectura,firma,leefirma,envio,escribircdr,leefirmacdr1,qrdato}= require('./t1.js');
+const {taskOne,taskTwo,taskTree,lectura,firma,leefirma,envio,escribircdr,leefirmacdr1,qrdato,enviacorreo,leepdf,imppdf}= require('./t1.js');
 const Note1 = require('../models/Note');
 const { createInvoice } = require("../createInvoice");
+const { createInvoice1 } = require("../createInvoice1");
+
+//const { correo } = require("./correo2");
 
 async function main(
      firmadozip,
@@ -25,7 +28,10 @@ async function main(
      total,
      tipo_de_comprobante,
      porcentaje_de_igv,
-     items
+     items,
+     email,
+     archivot,
+     cliente_direccion
   )
   {
     try{
@@ -47,6 +53,38 @@ async function main(
         //const  firmadozip='10309611131-01-F001-2045.zip';
 	       //const  firmado='./10309611131-01-F001-2045.xml';
            //const  archivosinfirma='./10309611131-01-F001-2045sf.xml';
+
+
+           var res=serie.substring(0, 1);
+           var tdocu="";
+           var codcli="";
+           if (res=="F"){
+               tdocu="01";
+               codcli="6";
+               
+           }
+           if (res=="B"){
+               tdocu="03";
+               codcli="1";
+   
+           }
+           if (res=="P"){
+               tdocu="03";
+               codcli="1";
+           }
+   
+           const textoqr=rucemisor+"|"+tdocu+"|"+serie+"|"+numero+"|"+total_igv+"|"+total+"|"+fecha_de_emision+"|"+codcli+"|"+cliente_numero_de_documento;
+   
+   
+   
+   
+   
+           const generarqr = await qrdato(textoqr);
+   
+           console.log(textoqr);
+
+           
+
 
 
 
@@ -157,34 +195,7 @@ async function main(
         }
 
 
-        var res=serie.substring(0, 1);
-        var tdocu="";
-        var codcli="";
-        if (res=="F"){
-            tdocu="01";
-            codcli="6";
-            
-        }
-        if (res=="B"){
-            tdocu="03";
-            codcli="1";
-
-        }
-        if (res=="P"){
-            tdocu="03";
-            codcli="1";
-        }
-
-        const textoqr=rucemisor+"|"+tdocu+"|"+serie+"|"+numero+"|"+total_igv+"|"+total+"|"+fecha_de_emision+"|"+codcli+"|"+cliente_numero_de_documento;
-
-
-
-
-
-        const generarqr = await qrdato(textoqr);
-
-        console.log(textoqr);
-
+       
 
         const invoice={
             firmadozip,
@@ -209,24 +220,53 @@ async function main(
             total,
             tipo_de_comprobante,
             porcentaje_de_igv,
-            items
+            items,
+            cliente_direccion
+            
         };
 
         let archivo=firmadozip.slice(0, -4);
 
         var pdf=archivo+".pdf";
+       console.log(invoice.items.length) 
 
+       if (invoice.items.length<9) {
+        const pdf1 =  await  createInvoice(invoice, pdf);
 
-       const pdf1 =  createInvoice(invoice, pdf);
+       }
+       else{
+        const pdf1 =  await  createInvoice1(invoice, pdf);  
+
+       }
+       
+
 
 
 
 
         const leidofirmazip = await leefirma(firmadozip);
         const leidofirmacdrzip = await leefirmacdr1("R-"+firmadozip);
+        const leidofirmapdf = await leepdf(pdf);
+
+
+        //const imprimepdf=await imppdf(archivot);
+
+        //undefined
+        
+
+        
+       // console.log(leidofirmacdrzip);
+
+
+        //var corre=correo('grupo23pe@yahoo.com',leidofirmazip,leidofirmacdrzip);
+
+        console.log("este es el parametro enviado ")
+        console.log(email)
+
+        const ecorreo=await enviacorreo(email,leidofirmazip,leidofirmacdrzip,archivot,razonemisor,cliente_numero_de_documento,cliente_denominacion,leidofirmapdf,tipo_de_comprobante);
  
          
-        var data = [leidofirmazip,leidofirmacdrzip ];
+        var data = [leidofirmazip,leidofirmacdrzip,leidofirmapdf ];
         return data
 
       

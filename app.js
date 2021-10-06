@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 
 // settings
-app.set('port', process.env.PORT || 4001);
+app.set('port', process.env.PORT || 3500);
 
 // middlewares 
 app.use(cors());
@@ -12,6 +12,11 @@ app.use(express.json());
 
 // routes
 app.use('/api/notes', require('./routes/notes'));
+
+
+app.use('/api/customers', require('./routes/customer'));
+
+
 app.use('/api/users', require('./routes/users'));
 app.use('/api/resubol', require('./routes/resubol'));
 app.use('/api/resubolanu', require('./routes/resubolanu'));

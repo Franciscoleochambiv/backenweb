@@ -12,8 +12,11 @@ const PDFDocument = require("pdfkit");
 // code.pipe(output); 
 
 function createInvoice(invoice, path) {
-  let doc = new PDFDocument({ size: "A4", margin: 50 });
-     
+  let doc = new PDFDocument({ size: "A4", margin: 30 });
+  //210 × 297
+
+ doc
+  .image("boleta2.jpg", 0, 0, { width: 600 })
 
 
   //var code = qr.image('10309611131|500|708', { type: 'png' });  
@@ -27,54 +30,86 @@ function createInvoice(invoice, path) {
 
   doc.end();
   doc.pipe(fs.createWriteStream(path));
+
+  
+
+
 }
 
 function generateHeader(doc,invoice) {
+
+  let ndocu="Pedido";
+     let comple="";
+        if (invoice.tipo_de_comprobante=="01"){
+          ndocu="Factura" ;
+          comple="Electrónica";          
+        }
+        if (invoice.tipo_de_comprobante=="03"){
+          ndocu="Boleta";
+          comple="Electrónica";          
+        }        
+        if (invoice.tipo_de_comprobante=="05"){
+           ndocu="Pedido";
+           comple="Electronico";          
+        }
+
   doc
-    .image("logo.png", 350, 45, { width: 50 })
+     
+    .image("images.jpeg", 270, 40, { width: 130 })
+
+    //.image("boleta2.jpeg", 350, 80, { width: 130 })
+
     .fillColor("#444444")
-    .fontSize(20)
-    //.text(invoice.razonemisor, 150, 57)
-    .fontSize(10)
     
-
-    .text(invoice.razonemisor, 25, 65)
-    .text("Domicilio Fiscal : "+ invoice.diremisor, 10, 75)
-    .text(invoice.provincia+" "+invoice.ciudad+" "+invoice.distrito, 10, 90 )
-    .text('RUC : '+ invoice.rucemisor, 50, 105)
-    .text(formatDate(new Date()), 65, 120)
-
+    //.text(invoice.razonemisor, 150, 57)
+    .fontSize(8)    
+    .text(invoice.razonemisor, 25, 45)
+    .fontSize(14)
+    .font("Helvetica-Bold")
+    .text(invoice.rucemisor, 475, 45)
+    .fontSize(8)
+    .font("Helvetica")
+    .text("Domicilio Fiscal : "+ invoice.diremisor, 10, 55)
+    .fontSize(14)   
+    .font("Helvetica-Bold")  
+    .text(ndocu, 470, 60)
+    .fontSize(8)
+    .font("Helvetica")
+    .text(invoice.provincia+" "+invoice.ciudad+" "+invoice.distrito, 25, 65 )
+    .fontSize(14)
+    .font("Helvetica-Bold")  
+    .text(comple, 455, 73)
+    .fontSize(8)
+    .font("Helvetica")  
+    .text('RUC : '+ invoice.rucemisor, 50, 75)
+    .fontSize(12)
+    .font("Helvetica-Bold")  
+    .text(invoice.serie+"-"+invoice.numero, 470, 88)
+    .fontSize(8)
+    .font("Helvetica")  
+    .text(formatDate(new Date()), 65, 85)
     .moveDown();
 }
 
 
 function generateCustomerInformation(doc, invoice) {
-  let ndocu="Pedido";
-  if (invoice.tipo_de_comprobante=="01"){
-     ndocu="Factura";
-    
-  }
-  if (invoice.tipo_de_comprobante=="03"){
-    ndocu="Boleta";
-    
-  }
-  
-  if (invoice.tipo_de_comprobante=="05"){
-    ndocu="Pedido";
-    
-  }
-  
-  doc
-    .fillColor("#444444")
-    .fontSize(20)
-    .text(ndocu+" Electronica", 50, 160);
-
-  generateHr(doc, 185);
-
-  const customerInformationTop = 200;
+  const customerInformationTop = 132;
 
   doc
-    .fontSize(10)
+    .font("Helvetica")  
+    .fontSize(8)
+    .text("Razon Social : "+ invoice.cliente_denominacion, 50, customerInformationTop)
+    .text(formatDate(new Date()), 490, customerInformationTop )
+
+    .text("Nro Doc Identidad : " + invoice.cliente_numero_de_documento, 50, customerInformationTop + 12)
+    .text(formatDate(new Date()), 490, customerInformationTop +12)
+
+    .text("Direccion : "+invoice.cliente_direccion, 50, customerInformationTop + 24)
+    .text("Moneda : SOLES", 50, customerInformationTop + 36)
+
+
+
+/*
     .text("Serie - Numero:", 50, customerInformationTop)
     .font("Helvetica-Bold")
     .text(invoice.serie+"-"+invoice.numero, 150, customerInformationTop)
@@ -89,10 +124,12 @@ function generateCustomerInformation(doc, invoice) {
     )
 
     .font("Helvetica-Bold")
-    .text("Razon Social : "+ invoice.cliente_denominacion, 300, customerInformationTop)
+    .text("Razon Social : "+ invoice.cliente_denominacion, 250, customerInformationTop)
     .font("Helvetica")
-    .text("Nro Doc Identidad : " + invoice.cliente_numero_de_documento, 300, customerInformationTop + 15)
-    .text("Direccion : "+invoice.cliente_direccion, 300, customerInformationTop + 30)
+    .text("Nro Doc Identidad : " + invoice.cliente_numero_de_documento, 250, customerInformationTop + 15)
+    .text("Direccion : "+invoice.cliente_direccion, 250, customerInformationTop + 30)
+
+    */
 /*
     .text(
       invoice.cliente_direccion +
@@ -106,127 +143,73 @@ function generateCustomerInformation(doc, invoice) {
 */
     .moveDown();
 
-  generateHr(doc, 252);
+//  generateHr(doc, 252);
 }
 
 function generateInvoiceTable(doc, invoice) {
   let i;
-  let invoiceTableTop = 280;
-
-  doc.font("Helvetica-Bold");
-  generateTableRow(
-    doc,
-    invoiceTableTop,
-    "Codigo",
-    "Description",
-    "Precio Unitario",
-    "Cantidad",
-    "Total"
-  );
-  generateHr(doc, invoiceTableTop + 20);
-  doc.font("Helvetica");
-  invoiceTableTop = 300;
-  let position=300;
-
+  let invoiceTableTop = 185;
+  let position=185;
+  
   for (i = 0; i < invoice.items.length; i++) {
     const item = invoice.items[i];
-     position = position + 15;
-    //console.log(postition);
+     position = position + 10;
+
     generateTableRow(
       doc,
-      position,
-      position,
-      item.product_name,
-      formatCurrency(item.unit_price),
+      position, 
+      item.codigo,           
       item.quantity,
+      item.unidad_de_medida,
+      item.product_name,    
+      formatCurrency(item.unit_price),      
       formatCurrency(item.quantity*item.unit_price)
     );
 
 
-    if (position>660){
-
-
-      doc.addPage();
-      generateHeader(doc,invoice);
-      generateCustomerInformation(doc, invoice);
-      generateTableRow(
-        doc,
-        280,
-        "Codigo",
-        "Description",
-        "Precio Unitario",
-        "Cantidad",
-        "Total"
-      );
-      generateHr(doc, 300);
-      doc.font("Helvetica");
-
-      position = 300;
-
-
-    }
-
-   // generateHr(doc, position + 20);
-  }
-
-
-
-
-  if (position>660){
-
-
-    doc.addPage();
-    generateHeader(doc,invoice);
-    generateCustomerInformation(doc, invoice);
-    generateTableRow(
-      doc,
-      280,
-      "Codigo",
-      "Description",
-      "Precio Unitario",
-      "Cantidad",
-      "Total"
-    );
-    generateHr(doc,300);
-    doc.font("Helvetica");
-    position = 300;
-
+   
 
   }
 
 
 
-  const subtotalPosition = position + 30;
+
+ 
+
+  const subtotalPosition = 275;
   generateTableRow(
     doc,
     subtotalPosition,
     "",
     "",
-    "Subtotal",
     "",
+    "",
+    "Subtotal",  
     formatCurrency(invoice.total_gravada)
   );
 
-  const paidToDatePosition = subtotalPosition + 15;
+  const paidToDatePosition = subtotalPosition + 10;
   generateTableRow(
     doc,
     paidToDatePosition,
     "",
     "",
-    "IGV",
     "",
+    "",
+    "IGV",    
     formatCurrency(invoice.total_igv)
   );
 
-  const duePosition = paidToDatePosition + 15;
+  const duePosition = paidToDatePosition + 10;
   doc.font("Helvetica-Bold");
   generateTableRow(
     doc,
     duePosition,
     "",
     "",
-    "Total",
     "",
+    "",
+    "Total",    
     formatCurrency(invoice.total)
   );
   doc.font("Helvetica");
@@ -239,29 +222,40 @@ function generateInvoiceTable(doc, invoice) {
 function generateFooter(doc,invoice) {
   doc
     //.image("logo.png", 50, 45, { width: 50 })
-//  .image("quewy.png", 220, 600, { align:"center",width: 150 })
-    .fontSize(10)
-    .text("Importe en Letras : "+invoice.total_letras, 50,580,{ align: "center", width: 500 })
-    .text("Factura Aceptada", 50,780,{ align: "center", width: 500 });
+    .image("quewy.png", 490, 305, { align:"center",width: 80 })
+    .fontSize(8)
+    .text(invoice.total_letras, 190,312)
+      //,{ align: "center", width: 500 })
+    .text("Representacion Impresa - Factura Aceptada ",190,350)
 
 }
 
 function generateTableRow(
   doc,
-  y,
-  item,
-  description,
-  unitCost,
+  y,  
+  codigo,
   quantity,
+  unidad_de_medida,
+  description,
+  unitCost,  
   lineTotal
 ) {
   doc
-    .fontSize(10)
-    .text(item, 50, y)
-    .text(description, 150, y)
-    .text(unitCost, 280, y, { width: 90, align: "right" })
-    .text(quantity, 370, y, { width: 90, align: "right" })
-    .text(lineTotal, 0, y, { align: "right" });
+    .fontSize(7)   
+    .text(codigo, 50, y)
+    .text(quantity,113, y,{ width: 5, align: "right" })
+    .text(unidad_de_medida, 145, y)
+    .text(description, 170, y)
+    .text(unitCost, 480, y )    
+    .text(lineTotal,535, y)
+
+    /*
+    .text(quantity, 154, y, { width: 5, align: "right" })
+    .text(unidad_de_medida, 160, y)
+    .text(description, 170, y)
+    .text(unitCost, 430, y, { width: 6, align: "right" })    
+    .text(lineTotal,475, y, { align: "right" });
+    */
 }
 
 
@@ -279,7 +273,7 @@ function generateHr(doc, y) {
 }
 
 function formatCurrency(cents) {
-  return "S/." + (cents/1 ).toFixed(2);
+  return  (cents/1 ).toFixed(2);
 }
 
 function formatDate(date) {

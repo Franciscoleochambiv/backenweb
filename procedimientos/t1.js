@@ -1,6 +1,7 @@
 const fs = require("fs");
 const util = require("util");
 
+
 const writeFile = util.promisify(fs.writeFile);
   var exec1 = require('child_process').exec;
 
@@ -13,14 +14,18 @@ var qr = require('qr-image');
 const Note1 = require('../models/Note');
 
 
-
+const ENDPOINT1 = "https://adryan2.sytes.net:3001";
+const ENDPOINT2 = "http://157.245.124.102:7001";
+const ENDPOINT3 = "http://localhost:3010";
+//"https://apipancho.herokuapp.com";
+//http://adryan2.sytes.net:3001
 
 //var util =require('util')
 
 //var fs = require('fs');
 
 //const fs1=util.promisify(fs.writeFile);
-//const sleep=util.promisify(setTimeout);
+const sleep=util.promisify(setTimeout);
 
 //const archivo=util.promisify(fs);
 
@@ -38,8 +43,20 @@ module.exports ={
          // var f = new Date();
          // horaA=f.getFullYear()+"-"+(f.getMonth() +1)+"-"+f.getDate();
 
-          
+                  console.log(tipo_de_comprobante); 
+                  let ntipodoc=" "
+                  if (tipo_de_comprobante=="03"){
+                     ntipodoc='"1"' 
 
+                  }
+                  else if (tipo_de_comprobante=="01"){
+                    ntipodoc='"6"' 
+
+
+                  }
+
+                  console.log("francisco este es el  tipo de comprobante ")
+                  console.log(ntipodoc)
 
 
 
@@ -108,7 +125,7 @@ module.exports ={
                         '<cbc:RegistrationName>'+razonemisor+'</cbc:RegistrationName>'+
                         '<cac:RegistrationAddress>'+
                         '<cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">040110</cbc:ID>'+
-                        '<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">0001</cbc:AddressTypeCode>'+
+                        '<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">0000</cbc:AddressTypeCode>'+
                         '<cbc:CityName>'+provincia+'</cbc:CityName>'+
                         '<cbc:CountrySubentity>'+ciudad+'</cbc:CountrySubentity>'+
                         '<cbc:District>'+distrito+'</cbc:District>'+
@@ -125,7 +142,7 @@ module.exports ={
                 '<cac:AccountingCustomerParty>'+
                     '<cac:Party>'+
                     '<cac:PartyIdentification>'+
-                        '<cbc:ID schemeID="6" schemeName="Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">'+cliente_numero_de_documento+'</cbc:ID>'+
+                        '<cbc:ID schemeID='+ntipodoc+' schemeName="Documento de Identidad" schemeAgencyName="PE:SUNAT" schemeURI="urn:pe:gob:sunat:cpe:see:gem:catalogos:catalogo06">'+cliente_numero_de_documento+'</cbc:ID>'+
                     '</cac:PartyIdentification>'+
                     '<cac:PartyLegalEntity>'+
                         '<cbc:RegistrationName>'+cliente_denominacion+'</cbc:RegistrationName>'+
@@ -416,7 +433,7 @@ module.exports ={
                    
             let response =  await  soap.createClientAsync(url, options)
            // console.log(response)
-            var wsSecurity = new soap.WSSecurity("20455968268FRANCO12", "FRANCISCO", {});
+            var wsSecurity = new soap.WSSecurity("10309611131FRANCO12", "FRANCISCO", {});
 
            // console.log(wsSecurity)
 
@@ -440,7 +457,7 @@ module.exports ={
             //let seguridad = await response.setSecurityAsync(wsSecurity)
 
             console.log("resultado de seguridadxxxxxxxxxxxxxxxxxxx")
-            //console.log(response)
+            console.log(response)
 
 
                 
@@ -535,10 +552,71 @@ module.exports ={
 
           }
        },
+
+
+
+       async leepdf(parameter1){
+        try{
+             
+            const pdf=parameter1;
+            //parameter1; 
+
+            
+
+            console.log("vamos a ller el pdf")
+            console.log(pdf)
+
+            
+           await sleep(2000); 
+
+           const data30 = fs.readFileSync(pdf,{
+            encoding:"base64"
+           });
+
+           console.log(data30)
+           
+           //let busca=firmadozip.slice(0, -4);
+           
+           //console.log("estamos en la opcion de  busqueda y acturalizacon de data")
+           //console.log(busca);
+
+
+        /*
+             Note1.findOneAndUpdate(
+                {title:busca},
+                {xml_zip_base64:data},
+                )
+                .then(console.log("encontrado"))
+                .catch(console.log("error"))    
+            
+           
+      */
+
+             
+
+
+           
+            return data30;
+
+        }
+        catch(e){
+            console.log(e);  
+
+          }
+       },
+
+
+       
+    
+
+
     
        
 
        async qrdato(parameter1){
+
+       
+
         try{
 
             
@@ -561,6 +639,89 @@ module.exports ={
 
           }
        },
+
+
+
+       async enviacorreo(ema,xml,cdr,archivot,razonemisor,cliente_numero_de_documento,cliente_denominacion,pdf,tipo_de_comprobante){
+
+
+        const axios = require('axios')
+        console.log("este es el coreo")
+        console.log(ema)
+
+
+        try{
+             
+            
+             axios.post(ENDPOINT2+'/api/shoping1/correo', {           
+                 email:ema,
+                 xml:xml,
+                 cdr:cdr,                
+                 archivot:archivot,
+                 razonemisor:razonemisor,
+                 clienteruc:cliente_numero_de_documento,
+                 clientename:cliente_denominacion,
+                 pdf:pdf,
+                 tipo:tipo_de_comprobante
+                
+            })              
+            .then(res =>  
+             
+              //datacodcli=(res.data[0].id)+1
+            //  this.fetchcodigo()
+            console.log("qwqw")
+
+            )
+            .catch(err =>
+              console.log(err)
+             )
+
+
+            
+
+        }
+        catch(e){
+            console.log(e);  
+
+          }
+       },
+
+       async imppdf(archivot){
+
+
+        const axios = require('axios')
+        //console.log("este es el coreo")
+        console.log(archivot)
+
+
+        try{
+
+            // window.open('10309611131-01-F001-2529.pdf');
+             
+            
+             axios.get(ENDPOINT3+'/imprimir')              
+            .then(res =>  
+             
+              //datacodcli=(res.data[0].id)+1
+            //  this.fetchcodigo()
+            console.log("envismos la impresion")
+
+            )
+            .catch(err =>
+              console.log(err)
+             )
+
+
+            
+
+        }
+        catch(e){
+            console.log(e);  
+
+          }
+       }
+
+    
 
 
 

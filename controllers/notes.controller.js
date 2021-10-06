@@ -53,7 +53,8 @@ notesCtrl.createNote = async (req, res) => {
             aceptada_por_sunat,
             sunat_soap_error,
             sunat_responsecode,            
-            items
+            items,
+            email        
     } = req.body; 
     
    // console.log(req.body.items);
@@ -80,6 +81,7 @@ notesCtrl.createNote = async (req, res) => {
     const  archivosinfirma1=title+'sf.xml';
     var porcentaje_de_igv="18.00";
     var pdf=title+".pdf";
+    var archivot=title;
 
    // createInvoice(invoice, pdf);
 
@@ -135,7 +137,11 @@ notesCtrl.createNote = async (req, res) => {
     total,
     tipo_de_comprobante,
     porcentaje_de_igv,
-    items
+    items,    
+    email,
+    archivot,
+    cliente_direccion
+
    );
    //console.log("valores devueltos por el procedimiento")
    let xml=soso[0];
