@@ -1,7 +1,7 @@
            const fs = require("fs");
             var f = new Date();
             horaA=f.getFullYear()+"-"+(f.getMonth() +1)+"-"+f.getDate();
-              var rucemisor="10309611131";
+              var rucemisor="10444864589";
 
                 var item=0;
                 var proveedor="lolo";
