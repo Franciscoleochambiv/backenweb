@@ -6,6 +6,9 @@ docker-compose*
 .git
 .gitignore
 .env
+.xml
+.pdf
+.zip
 */bin
 */obj
 README.md
