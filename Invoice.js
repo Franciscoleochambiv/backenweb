@@ -5,11 +5,11 @@
 
                 var item=0;
                 var proveedor="lolo";
-                var razonemisor="FRANCISCO LEO CHAMBI VILCA";
+                var razonemisor="CHAQUILLA SONCCO VIANEY";
                 var provincia="AREQUIPA";
                 var ciudad="AREQUIPA";
-                var distrito="CERRO COLORADO";
-                var diremisor="AV GARCILAZO DE LA VEGA 806";
+                var distrito="MIRAFLORES";
+                var diremisor="PUEBLO JOVEN JUAN XXIII MZNA O LTE 4";
 
                 var plantilla3 ='</Invoice>';
 
@@ -97,7 +97,7 @@ function Invoice(data,res) {
                         '<cbc:RegistrationName>'+razonemisor+'</cbc:RegistrationName>'+
                         '<cac:RegistrationAddress>'+
                         '<cbc:ID schemeName="Ubigeos" schemeAgencyName="PE:INEI">040110</cbc:ID>'+
-                        '<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">0001</cbc:AddressTypeCode>'+
+                        '<cbc:AddressTypeCode listAgencyName="PE:SUNAT" listName="Establecimientos anexos">0000</cbc:AddressTypeCode>'+
                         '<cbc:CityName>'+provincia+'</cbc:CityName>'+
                         '<cbc:CountrySubentity>'+ciudad+'</cbc:CountrySubentity>'+
                         '<cbc:District>'+distrito+'</cbc:District>'+
@@ -121,6 +121,10 @@ function Invoice(data,res) {
                     '</cac:PartyLegalEntity>'+
                     '</cac:Party>'+
                 '</cac:AccountingCustomerParty>'+
+                 '<cac:PaymentTerms>'+
+                 '<cbc:ID>FormaPago</cbc:ID>'+
+                '<cbc:PaymentMeansID>Contado</cbc:PaymentMeansID>'+
+                '</cac:PaymentTerms>'+
                 '<cac:TaxTotal>'+
                     '<cbc:TaxAmount currencyID="PEN">'+data.total_igv+'</cbc:TaxAmount>'+
                     '<cac:TaxSubtotal>'+
