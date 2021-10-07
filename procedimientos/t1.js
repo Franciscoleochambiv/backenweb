@@ -426,7 +426,8 @@ module.exports ={
             const resultado= "R-"+firmadozip;
 
             const soap = require('soap');
-            const url = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+            //const url = 'https://e-beta.sunat.gob.pe/ol-ti-itcpfegem-beta/billService?wsdl';
+            const url ="https://e-factura.sunat.gob.pe/ol-ti-itcpfegem/billService?wsdl";
             const options = {
                     forceSoap12Headers: false
                 };
