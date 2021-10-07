@@ -417,7 +417,7 @@ module.exports ={
        },
 
 
-       async envio(parameter1,parameter2){
+       async envio(parameter1,parameter2,rucemisor){
 
         try{
              
@@ -439,7 +439,7 @@ module.exports ={
                    
             let response =  await  soap.createClientAsync(url, options)
            // console.log(response)
-            var wsSecurity = new soap.WSSecurity("10309611131FRANCO12", "FRANCISCO", {});
+            var wsSecurity = new soap.WSSecurity(rucemisor+"FRANCO13", "FRANCISCOa1", {});
 
            // console.log(wsSecurity)
 

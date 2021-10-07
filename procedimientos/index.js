@@ -134,7 +134,7 @@ async function main(
           const leidofirma = await leefirma(firmado); 
 
           
-          const enviar = await envio(firmado,leidofirma);
+          const enviar = await envio(firmado,leidofirma,rucemisor);
 
           let busca=firmadozip.slice(0, -4);
 
