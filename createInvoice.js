@@ -55,7 +55,7 @@ function generateHeader(doc,invoice) {
 
   doc
      
-    .image("images.jpeg", 270, 40, { width: 130 })
+    .image("images.jpeg", 270, 20, { width: 130 })
 
     //.image("boleta2.jpeg", 350, 80, { width: 130 })
 
