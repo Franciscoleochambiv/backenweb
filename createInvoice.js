@@ -69,7 +69,7 @@ function generateHeader(doc,invoice) {
     .text(invoice.rucemisor, 475, 45)
     .fontSize(8)
     .font("Helvetica")
-    .text("Domicilio Fiscal : "+ invoice.diremisor, 10, 55)
+    .text("Domicilio Fiscal : "+ invoice.diremisor, 25, 55)
     .fontSize(14)   
     .font("Helvetica-Bold")  
     .text(ndocu, 470, 60)
@@ -81,13 +81,13 @@ function generateHeader(doc,invoice) {
     .text(comple, 455, 73)
     .fontSize(8)
     .font("Helvetica")  
-    .text('RUC : '+ invoice.rucemisor, 50, 75)
+    .text('RUC : '+ invoice.rucemisor, 25, 75)
     .fontSize(12)
     .font("Helvetica-Bold")  
     .text(invoice.serie+"-"+invoice.numero, 470, 88)
     .fontSize(8)
     .font("Helvetica")  
-    .text(formatDate(new Date()), 65, 85)
+    .text(formatDate(new Date()), 25, 85)
     .moveDown();
 }
 
