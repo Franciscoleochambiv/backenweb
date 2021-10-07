@@ -22,6 +22,7 @@
 *.xml
 *.pdf
 *.zip
+*.pem
 private_key.pem
 certificado.pem
 
