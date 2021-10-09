@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const { getNotes, createNote, getNote, getNoteope,deleteNote, updateNote ,deleNota } = require('../controllers/notes.controller');
+const { getNotes, createNote, getNote, getNoteope,deleteNote, updateNote ,deleNota,reenvio,comprueba } = require('../controllers/notes.controller');
 
 
 //const lolo = require('/home/lolo/Descargas/mern-crud-2019-master/backend/envio.js');
@@ -9,6 +9,14 @@ const { getNotes, createNote, getNote, getNoteope,deleteNote, updateNote ,deleNo
 router.route('/')
     .get(getNotes)
     .post(createNote);
+
+
+router.route('/reenvio')    
+    .post(reenvio);
+
+router.route('/comprueba')    
+    .post(comprueba);
+    
 
 
 

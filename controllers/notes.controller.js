@@ -5,8 +5,8 @@ const Items = require('../models/Items');
 
 
 const { main }= require("../procedimientos/index.js");
-
-
+const { menu }= require("../procedimientos/index1.js");
+const { validacion }= require("../procedimientos/comprobar.js");
 
 
 
@@ -18,6 +18,47 @@ notesCtrl.getNotes = async (req, res) => {
     console.log("likstado");
     res.json(notes);
 };
+
+
+
+notesCtrl.reenvio = async (req, res) => {
+    const { 
+        archivo        
+    } = req.body
+    var  ren= await menu(archivo);
+
+
+
+}
+
+notesCtrl.comprueba = async (req, res) => {
+    const { 
+
+        rucEmisor,
+        tipoCDP,
+        serieCDP,
+        numeroCDP,
+        tipoDocIdReceptor,
+        numeroDocIdReceptor,
+        fechaEmision,
+        importeTotal                            
+
+    } = req.body
+
+    console.log("datos TIPOCDP")
+    console.log(tipoCDP)
+
+    if (tipoCDP!="05"){
+
+    
+    var  renare= await validacion(rucEmisor,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
+    
+    }
+
+
+
+}
+
 
 
 
