@@ -2,7 +2,7 @@ const {valida}= require('./t3.js');
 
 //const { correo } = require("./correo2");
 
-async function validacion(
+async function anulaboleta(
     rucemisor,
     tipo,
     serie,
@@ -38,7 +38,7 @@ async function validacion(
 
 
         console.log("este es el parametro enviado ")
-        var data = valor3;
+        var data = [valor3];
         return data
 
       
@@ -54,7 +54,7 @@ async function validacion(
 }
 
 module.exports = {
-    validacion
+    anulaboleta
   };
 
 //main();

@@ -1,0 +1,26 @@
+POST http://localhost:3500/api/notes/anulafactura HTTP/1.1
+content-type: application/json
+
+{
+    "rucemisor":10444864589, 
+    "fecha_de_emision": "2021-10-07",
+    "fecha_actual":"2021-10-10",
+    "razonemisor": "CH-AQUILLA SONCCO VIANEY",
+    "Nrodocu":"RA-20211010-3",
+    "archivosinfirma":"10444864589-RA-20211010-3SF.xml",     
+    //"archivosinfirma1":"R-10444864589-RA-20201010-1.zip",
+    "porcentaje_de_igv":18.00,
+    "items": [        
+      {      
+          "tipo" :"01",
+          "serie":"F001",
+          "numerobol":"1"
+
+
+      }
+     
+        
+    ]
+    
+        
+}

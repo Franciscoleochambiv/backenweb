@@ -7,7 +7,8 @@ const Items = require('../models/Items');
 const { main }= require("../procedimientos/index.js");
 const { menu }= require("../procedimientos/index1.js");
 const { validacion }= require("../procedimientos/comprobar.js");
-
+const { anulafactura }= require("../procedimientos/index3.js");
+const { anulaboleta }= require("../procedimientos/index4.js");
 
 
 
@@ -31,7 +32,87 @@ notesCtrl.reenvio = async (req, res) => {
 
 }
 
+
+
 notesCtrl.comprueba = async (req, res) => {
+    const { 
+
+        rucEmisor,
+        tipoCDP,
+        serieCDP,
+        numeroCDP,
+        tipoDocIdReceptor,
+        numeroDocIdReceptor,
+        fechaEmision,
+        importeTotal                            
+
+    } = req.body
+
+    console.log("datos TIPOCDP estos son los datos comprueba")
+    console.log(req.body)
+
+    if (tipoCDP!="05"){
+
+    
+            var  renare= await validacion(rucEmisor,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
+
+            if (renare==="0000"){
+                res.json(true)
+            
+            }
+            else{
+
+                res.json(false)
+            }
+
+
+
+}
+}
+
+notesCtrl.anulaf = async (req, res) => {
+    const { 
+        rucemisor, 
+        fecha_de_emision,
+        fecha_actual,
+        razonemisor,
+        Nrodocu,
+        archivosinfirma,             
+        porcentaje_de_igv,
+        items    
+
+                            
+
+    } = req.body
+
+    console.log("entramos en anulacion de facturas")
+    //console.log("datos TIPOCDP estos son los datos comprueba")
+    console.log(req.body)
+
+    
+
+
+    
+    var  renare= await anulafactura(
+        rucemisor, 
+        fecha_de_emision,
+        fecha_actual,
+        razonemisor,
+        Nrodocu,
+        archivosinfirma,             
+        porcentaje_de_igv,
+        items    
+    );
+    
+    res.json(renare);
+  
+
+
+
+}
+
+
+notesCtrl.anulab = async (req, res) => {
     const { 
 
         rucEmisor,
@@ -51,13 +132,19 @@ notesCtrl.comprueba = async (req, res) => {
     if (tipoCDP!="05"){
 
     
-    var  renare= await validacion(rucEmisor,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
+    var  renare= await anulaboleta(rucEmisor,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
     
     }
 
 
 
 }
+
+
+
+
+
+
 
 
 
