@@ -7,8 +7,9 @@ const Items = require('../models/Items');
 const { main }= require("../procedimientos/index.js");
 const { menu }= require("../procedimientos/index1.js");
 const { validacion }= require("../procedimientos/comprobar.js");
+const { validacion2 }= require("../procedimientos/comprobar2.js");
 const { anulafactura }= require("../procedimientos/index3.js");
-const { anulaboleta }= require("../procedimientos/index4.js");
+const { anulabol }= require("../procedimientos/index4.js");
 
 
 
@@ -70,6 +71,47 @@ notesCtrl.comprueba = async (req, res) => {
 }
 }
 
+
+notesCtrl.comprueba2 = async (req, res) => {
+    const { 
+
+        rucEmisor,
+        data                       
+
+    } = req.body
+
+    console.log("datos TIPOCDP estos son los datos valida2")
+    console.log(req.body)
+
+   
+
+    
+    
+
+    
+            var  renare= await validacion2(rucEmisor,data)
+                //,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
+            //var esta=renare.slice(0,4)
+            /*
+            if (esta==="0000"){
+                res.json({
+                     "paso":true,
+                     "estado":esta,
+                     "mensage":renare
+                    }                    
+                    )
+            
+            }
+            else{
+
+                res.json(false)
+            }
+            */
+            res.json(renare)
+
+
+}
+
 notesCtrl.anulaf = async (req, res) => {
     const { 
         rucemisor, 
@@ -88,10 +130,6 @@ notesCtrl.anulaf = async (req, res) => {
     console.log("entramos en anulacion de facturas")
     //console.log("datos TIPOCDP estos son los datos comprueba")
     console.log(req.body)
-
-    
-
-
     
     var  renare= await anulafactura(
         rucemisor, 
@@ -106,36 +144,47 @@ notesCtrl.anulaf = async (req, res) => {
     
     res.json(renare);
   
-
-
-
 }
 
 
 notesCtrl.anulab = async (req, res) => {
     const { 
-
-        rucEmisor,
-        tipoCDP,
-        serieCDP,
-        numeroCDP,
-        tipoDocIdReceptor,
-        numeroDocIdReceptor,
-        fechaEmision,
-        importeTotal                            
+        rucemisor,
+        total, 
+        impuesto,
+        subtotal,      
+        fecha_de_emision,
+        fecha_actual,
+        razonemisor,
+        Nrodocu,
+        archivosinfirma,             
+        porcentaje_de_igv,
+        items                            
 
     } = req.body
 
-    console.log("datos TIPOCDP")
-    console.log(tipoCDP)
-
-    if (tipoCDP!="05"){
+    console.log("entramos en anulacion de boletas")
+    //console.log("datos TIPOCDP estos son los datos comprueba")
+    console.log(req.body)
 
     
-    var  renare= await anulaboleta(rucEmisor,tipoCDP,serieCDP,numeroCDP,tipoDocIdReceptor,numeroDocIdReceptor,fechaEmision,importeTotal);
+    var  renare1= await anulabol(
+        rucemisor, 
+        total,
+        impuesto,
+        subtotal,
+        fecha_de_emision,
+        fecha_actual,
+        razonemisor,
+        Nrodocu,
+        archivosinfirma,             
+        porcentaje_de_igv,
+        items    
+        
+        );
+        res.json(renare1);  
     
-    }
-
+ 
 
 
 }
